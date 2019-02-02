@@ -22,9 +22,9 @@ import cz.msebera.android.httpclient.Header;
 
 public class MovieActivity extends AppCompatActivity {
 
-    private static final String API_URL = "https://api.themoviedb.org/3";
+    private static final String TMDB_API_BASE_URL = "https://api.themoviedb.org/3";
     private static final String REQUEST_TYPE = "/movie/now_playing?";
-    private static final String API_KEY = "api_key=a07e22bc18f5cb106bfe4cc1f83ad8ed";
+    private final String TMDB_API_KEY = "api_key=a07e22bc18f5cb106bfe4cc1f83ad8ed";
 
     private List<Movie> movies;
 
@@ -41,7 +41,7 @@ public class MovieActivity extends AppCompatActivity {
 
         AsyncHttpClient client = new AsyncHttpClient();
 
-        client.get(API_URL + REQUEST_TYPE + API_KEY, new JsonHttpResponseHandler() {
+        client.get(TMDB_API_BASE_URL + REQUEST_TYPE + TMDB_API_KEY, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 try {
