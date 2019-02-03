@@ -1,9 +1,12 @@
 package com.example.aneeshkjalan.cineflix;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.aneeshkjalan.cineflix.Models.Movie;
 import com.google.android.youtube.player.YouTubeBaseActivity;
 import com.google.android.youtube.player.YouTubeInitializationResult;
@@ -31,6 +34,8 @@ public class DetailActivity extends YouTubeBaseActivity {
     RatingBar ratingBar;
     YouTubePlayerView youtubePlayer;
 
+    ImageView poster;
+
     Movie toDisplay;
 
     @Override
@@ -42,6 +47,8 @@ public class DetailActivity extends YouTubeBaseActivity {
         overview = findViewById(R.id.detail_overview);
         ratingBar = findViewById(R.id.ratingBar);
         youtubePlayer = findViewById(R.id.youtube_player);
+
+        poster = findViewById(R.id.detail_poster);
 
         toDisplay = (Movie) Parcels.unwrap(getIntent().getParcelableExtra("movie"));
 
@@ -57,6 +64,7 @@ public class DetailActivity extends YouTubeBaseActivity {
                     JSONArray results = response.getJSONArray("results");
 
                     if(results.length() == 0) {
+                        loadBackdropImage();
                         return;
                     }
 
@@ -70,9 +78,14 @@ public class DetailActivity extends YouTubeBaseActivity {
                     }
 
                     if(index == results.length()) {
+                        loadBackdropImage();
                         return;
                     }
 
+
+                    /** This piece of code was for when the both components were visible by default and I had to hide ImageView
+                    * *poster.getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;**/
+                    youtubePlayer.setVisibility(View.VISIBLE);
                     initializeYoutubePlayer(results.getJSONObject(index).getString("key"), ratingBar.getRating());
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -85,6 +98,13 @@ public class DetailActivity extends YouTubeBaseActivity {
             }
         });
 
+    }
+
+    private void loadBackdropImage() {
+        /** This piece of code was for when both components were visible by default and I had to hide YouTubePlayerView
+         * youtubePlayer.getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;*/
+        poster.setVisibility(View.VISIBLE);
+        Glide.with(this).load(toDisplay.getbackdropPath()).into(poster);
     }
 
     private void initializeYoutubePlayer(final String key, final double rating) {
